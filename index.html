@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Drafters Best Ball Overlay</title>
+  <title>Fantasy Draft Extensions</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,8 +13,9 @@
       --bg2: #13161e;
       --bg3: #1a1e2a;
       --border: rgba(255,255,255,0.07);
-      --accent: #4f8ef7;
-      --accent2: #e84393;
+      --blue: #4f8ef7;
+      --purple: #7c3aed;
+      --purple-light: #a78bfa;
       --text: #e8eaf0;
       --muted: #7a7f94;
       --green: #2ecc71;
@@ -40,7 +41,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 18px 48px;
-      background: rgba(13,15,20,0.85);
+      background: rgba(13,15,20,0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -51,106 +52,21 @@
       letter-spacing: 0.04em;
       color: var(--text);
     }
-    .nav-logo span { color: var(--accent); }
-    nav a.cta-nav {
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--bg);
-      background: var(--accent);
-      padding: 9px 22px;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    nav a.cta-nav:hover { background: #3a7be8; }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 140px 48px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -200px; right: -200px;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -100px; left: 30%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(232,67,147,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-tag {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(79,142,247,0.3);
-      padding: 5px 14px;
-      border-radius: 2px;
-      margin-bottom: 28px;
-      display: inline-block;
-    }
-    .hero h1 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(3rem, 7vw, 6rem);
-      font-weight: 800;
-      line-height: 1.0;
-      letter-spacing: -0.01em;
-      margin-bottom: 24px;
-      max-width: 780px;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--accent);
-    }
-    .hero p {
-      font-size: 1.15rem;
-      font-weight: 300;
       color: var(--muted);
-      max-width: 520px;
-      margin-bottom: 40px;
-      line-height: 1.7;
-    }
-    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-    .btn-primary {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #fff;
-      background: var(--accent);
-      padding: 14px 32px;
-      border-radius: 4px;
       text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
+      transition: color 0.2s;
     }
-    .btn-primary:hover { background: #3a7be8; transform: translateY(-1px); }
-    .hero-note {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-    .hero-note span { color: var(--green); }
+    .nav-links a:hover { color: var(--text); }
 
-    /* SECTION SHARED */
+    /* SHARED SECTION */
     section { padding: 96px 48px; }
     .section-label {
       font-family: 'Barlow Condensed', sans-serif;
@@ -158,7 +74,6 @@
       font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--accent);
       margin-bottom: 16px;
     }
     .section-title {
@@ -175,8 +90,159 @@
       font-weight: 300;
     }
 
+    /* HUB HERO */
+    .hub-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 140px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hub-hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(79,142,247,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hub-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: 30%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hub-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      border: 1px solid rgba(79,142,247,0.3);
+      padding: 5px 14px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      display: inline-block;
+    }
+    .hub-hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 24px;
+      max-width: 780px;
+    }
+    .hub-hero h1 em { font-style: normal; color: var(--blue); }
+    .hub-hero > p {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 64px;
+      line-height: 1.7;
+    }
+
+    /* PRODUCT CARDS */
+    .product-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 860px;
+    }
+    .product-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 36px 32px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .product-card.blue::before   { background: var(--blue); }
+    .product-card.purple::before { background: var(--purple); }
+    .product-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.14); background: var(--bg3); }
+    .product-card-platform {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+    }
+    .product-card.blue   .product-card-platform { color: var(--blue);         background: rgba(79,142,247,0.1);  border: 1px solid rgba(79,142,247,0.25); }
+    .product-card.purple .product-card-platform { color: var(--purple-light); background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25); }
+    .product-card h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+    }
+    .product-card p { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.65; flex: 1; }
+    .product-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+    .product-card-price { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; }
+    .product-card.blue   .product-card-price { color: var(--blue); }
+    .product-card.purple .product-card-price { color: var(--purple-light); }
+    .product-card-cta {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .product-card.blue   .product-card-cta { color: var(--blue); }
+    .product-card.purple .product-card-cta { color: var(--purple-light); }
+
+    /* PRODUCT SECTION DIVIDER */
+    .product-divider {
+      padding: 32px 48px;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .product-divider-pill {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .divider-blue   { color: var(--blue);         background: rgba(79,142,247,0.1);  border: 1px solid rgba(79,142,247,0.3); }
+    .divider-purple { color: var(--purple-light);  background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); }
+    .product-divider-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 800; }
+    .product-divider-line { flex: 1; height: 1px; background: var(--border); }
+
     /* FEATURES */
-    .features { background: var(--bg2); }
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -189,14 +255,9 @@
       padding: 40px 36px;
       border: 1px solid var(--border);
       transition: background 0.2s;
-      position: relative;
     }
     .feature-card:hover { background: var(--bg3); }
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      display: block;
-    }
+    .feature-icon { font-size: 2rem; margin-bottom: 20px; display: block; }
     .feature-card h3 {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 1.3rem;
@@ -205,120 +266,58 @@
       margin-bottom: 12px;
       color: var(--text);
     }
-    .feature-card p {
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1.7;
-    }
+    .feature-card p { font-size: 0.95rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
 
     /* SCREENSHOTS */
-    .screenshots { background: var(--bg3); }
-    .screenshots-intro { max-width: 560px; margin-bottom: 56px; }
     .screenshots-grid {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 32px;
       align-items: start;
+      margin-top: 48px;
     }
-    .screenshot-main {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      background: var(--bg2);
-    }
-    .screenshot-main img {
-      width: 100%;
-      display: block;
-    }
-    .screenshot-side {
-      width: 260px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      background: var(--bg2);
-    }
-    .screenshot-side img {
-      width: 100%;
-      display: block;
-    }
-    .screenshot-caption {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 10px;
-      font-weight: 300;
-      text-align: center;
-    }
-    @media (max-width: 900px) {
-      .screenshots-grid { grid-template-columns: 1fr; }
-      .screenshot-side { width: 100%; max-width: 320px; }
-    }
+    .screenshot-main { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--bg2); }
+    .screenshot-main img { width: 100%; display: block; }
+    .screenshot-side { width: 240px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--bg2); }
+    .screenshot-side img { width: 100%; display: block; }
+    .screenshot-caption { font-size: 0.8rem; color: var(--muted); margin-top: 10px; font-weight: 300; text-align: center; }
 
-    /* HOW IT WORKS */
-    .how { background: var(--bg); }
+    /* STEPS */
     .steps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 0;
       margin-top: 56px;
-      counter-reset: steps;
     }
-    .step {
-      padding: 36px 32px;
-      border-left: 1px solid var(--border);
-      position: relative;
-    }
+    .step { padding: 36px 32px; border-left: 1px solid var(--border); }
     .step:first-child { border-left: none; }
     .step-num {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 3.5rem;
       font-weight: 800;
-      color: rgba(79,142,247,0.15);
       line-height: 1;
       margin-bottom: 16px;
     }
-    .step h4 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      margin-bottom: 8px;
-    }
+    .step-num.blue   { color: rgba(79,142,247,0.18); }
+    .step-num.purple { color: rgba(124,58,237,0.22); }
+    .step h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 8px; }
     .step p { font-size: 0.9rem; color: var(--muted); font-weight: 300; }
 
     /* PRICING */
-    .pricing { background: var(--bg2); }
     .pricing-card {
       max-width: 440px;
       margin-top: 56px;
       background: var(--bg);
       border: 1px solid var(--border);
-      border-top: 3px solid var(--accent);
       padding: 48px 44px;
+      border-radius: 4px;
     }
-    .price-amount {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 4rem;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .price-amount span {
-      font-size: 1.5rem;
-      font-weight: 400;
-      color: var(--muted);
-      vertical-align: super;
-      font-family: 'Barlow', sans-serif;
-    }
-    .price-period {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 36px;
-    }
-    .price-features {
-      list-style: none;
-      margin-bottom: 36px;
-    }
+    .pricing-card.blue   { border-top: 3px solid var(--blue); }
+    .pricing-card.purple { border-top: 3px solid var(--purple); }
+    .price-amount { font-family: 'Barlow Condensed', sans-serif; font-size: 4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .price-amount span { font-size: 1.5rem; font-weight: 400; color: var(--muted); vertical-align: super; font-family: 'Barlow', sans-serif; }
+    .price-period { font-size: 0.9rem; color: var(--muted); margin-bottom: 36px; }
+    .price-features { list-style: none; margin-bottom: 36px; }
     .price-features li {
       padding: 10px 0;
       border-bottom: 1px solid var(--border);
@@ -328,13 +327,7 @@
       gap: 12px;
       font-weight: 300;
     }
-    .price-features li::before {
-      content: '✓';
-      color: var(--green);
-      font-weight: 700;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
+    .price-features li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
     .price-features li:last-child { border-bottom: none; }
     .btn-cta {
       display: block;
@@ -346,59 +339,27 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #fff;
-      background: var(--accent);
       padding: 16px;
       border-radius: 4px;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: filter 0.2s;
     }
-    .btn-cta:hover { background: #3a7be8; }
-    .cancel-note {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 14px;
-    }
+    .btn-cta.blue   { background: var(--blue); }
+    .btn-cta.purple { background: var(--purple); }
+    .btn-cta:hover { filter: brightness(1.15); }
+    .cancel-note { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
 
     /* FAQ */
-    .faq { background: var(--bg); }
     .faq-list { margin-top: 56px; max-width: 680px; }
-    .faq-item {
-      border-bottom: 1px solid var(--border);
-      padding: 28px 0;
-    }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 28px 0; }
     .faq-item:first-child { border-top: 1px solid var(--border); }
-    .faq-item h4 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      margin-bottom: 10px;
-      color: var(--text);
-    }
+    .faq-item h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 10px; color: var(--text); }
     .faq-item p { font-size: 0.95rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
 
     /* POLICIES */
-    .policies { background: var(--bg2); }
-    .policy-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      margin-top: 56px;
-    }
-    .policy-block h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--text);
-    }
-    .policy-block p, .policy-block li {
-      font-size: 0.9rem;
-      color: var(--muted);
-      font-weight: 300;
-      line-height: 1.8;
-    }
+    .policy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 56px; }
+    .policy-block h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+    .policy-block p, .policy-block li { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.8; }
     .policy-block ul { padding-left: 20px; margin-top: 8px; }
     .policy-block li { margin-bottom: 6px; }
 
@@ -418,10 +379,21 @@
     footer a:hover { color: var(--text); }
     .footer-links { display: flex; gap: 24px; }
 
+    /* ACCENT HELPERS */
+    .accent-blue   { color: var(--blue); }
+    .accent-purple { color: var(--purple-light); }
+
+    @media (max-width: 900px) {
+      .screenshots-grid { grid-template-columns: 1fr; }
+      .screenshot-side { width: 100%; max-width: 300px; }
+      .product-cards { grid-template-columns: 1fr; max-width: 480px; }
+    }
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
+      .nav-links { display: none; }
       section { padding: 72px 24px; }
-      .hero { padding: 120px 24px 72px; }
+      .hub-hero { padding: 120px 24px 72px; }
+      .product-divider { padding: 24px; }
       .policy-grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr 1fr; }
       .step { border-left: none; border-top: 1px solid var(--border); }
@@ -433,26 +405,57 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">Drafters <span>Overlay</span></div>
-    <a href="https://chrome.google.com/webstore" class="cta-nav">Get the Extension</a>
+    <div class="nav-logo">Fantasy <span>Extensions</span></div>
+    <div class="nav-links">
+      <a href="#drafters">Drafters Overlay</a>
+      <a href="#underdog">Underdog Overlay</a>
+      <a href="#policies">Policies</a>
+    </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-tag">Chrome Extension · Drafters NFL Best Ball Only</div>
-    <h1>Better Information.<br/><em>Better Drafts.</em></h1>
-    <p>A Chrome extension that adds real-time ownership data, stack tracking, and positional draft capital directly to your Drafters <strong style="color:var(--text); font-weight:500;">NFL best ball</strong> draft board — without ever leaving the page.</p>
-    <div class="hero-actions">
-      <a href="https://chrome.google.com/webstore" class="btn-primary">Get the Extension</a>
-      <span class="hero-note"><span>$3 / month</span> · Cancel anytime</span>
+  <!-- HUB HERO -->
+  <section class="hub-hero">
+    <div class="hub-tag">Chrome Extensions · Fantasy Draft Tools</div>
+    <h1>Draft smarter.<br/><em>Win more.</em></h1>
+    <p>Two Chrome extensions that surface real-time ownership data, stack tracking, and draft capital analytics directly inside your fantasy drafts — no tab switching, no guesswork.</p>
+
+    <div class="product-cards">
+      <a class="product-card blue" href="#drafters">
+        <div class="product-card-platform">🏈 Drafters · NFL Best Ball</div>
+        <h2>Drafters<br/>Overlay</h2>
+        <p>Ownership badges, QB stack highlights, and positional draft capital tracking — built for Drafters NFL best ball drafts.</p>
+        <div class="product-card-footer">
+          <span class="product-card-price">$10 / mo</span>
+          <span class="product-card-cta">Learn more →</span>
+        </div>
+      </a>
+      <a class="product-card purple" href="#underdog">
+        <div class="product-card-platform">🐶 Underdog Fantasy</div>
+        <h2>Underdog<br/>Overlay</h2>
+        <p>Exposure percentages, stack analysis, and draft capital — overlaid live on your Underdog Fantasy best ball draft board.</p>
+        <div class="product-card-footer">
+          <span class="product-card-price">$10 / mo</span>
+          <span class="product-card-cta">Learn more →</span>
+        </div>
+      </a>
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="features">
-    <div class="section-label">Features</div>
+
+  <!-- ══════════════════════════════════════════
+       DRAFTERS OVERLAY
+  ══════════════════════════════════════════ -->
+  <div class="product-divider" id="drafters">
+    <span class="product-divider-pill divider-blue">🏈 NFL Best Ball</span>
+    <span class="product-divider-title">Drafters Overlay</span>
+    <div class="product-divider-line"></div>
+  </div>
+
+  <!-- DRAFTERS: FEATURES -->
+  <section style="background: var(--bg2); padding: 96px 48px;">
+    <div class="section-label accent-blue">Features</div>
     <div class="section-title">Everything you need,<br/>right on the board.</div>
-    <p class="section-sub">No more tab switching. All the context you need to make informed decisions is surfaced directly in your draft.</p>
+    <p class="section-sub">No more tab switching. All the context you need to make smart decisions, surfaced directly in your Drafters NFL best ball draft.</p>
     <div class="features-grid">
       <div class="feature-card">
         <span class="feature-icon">🎯</span>
@@ -472,84 +475,82 @@
     </div>
   </section>
 
-  <!-- SCREENSHOTS -->
-  <section class="screenshots">
-    <div class="section-label">In Action</div>
+  <!-- DRAFTERS: SCREENSHOTS -->
+  <section style="background: var(--bg3); padding: 96px 48px;">
+    <div class="section-label accent-blue">In Action</div>
     <div class="section-title">See it for yourself.</div>
-    <div class="screenshots-intro">
-      <p class="section-sub">The overlay surfaces ownership, stacks, and draft capital directly inside your NFL best ball draft — no tab switching, no interruptions.</p>
-    </div>
+    <p class="section-sub">The overlay surfaces ownership, stacks, and draft capital directly inside your NFL best ball draft — no tab switching, no interruptions.</p>
     <div class="screenshots-grid">
       <div>
         <div class="screenshot-main">
-          <img src="screenshots/draft-view.png" alt="Drafters Overlay showing ownership percentages and draft capital on the draft board" />
+          <img src="screenshots/drafters-board.png" alt="Drafters Overlay on the draft board" />
         </div>
-        <p class="screenshot-caption">Ownership badges on every player + real-time draft capital tracking by position</p>
+        <p class="screenshot-caption">Ownership badges + stack highlights across the full draft board</p>
       </div>
       <div>
         <div class="screenshot-side">
-          <img src="screenshots/panel-view.png" alt="Drafters Overlay side panel showing picks, stacks, and positional capital bars" />
+          <img src="screenshots/drafters-panel.png" alt="Drafters Overlay side panel" />
         </div>
-        <p class="screenshot-caption">Side panel: my picks, stack indicators, and capital bars</p>
+        <p class="screenshot-caption">Side panel: picks, stacks &amp; draft capital</p>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="how">
-    <div class="section-label">Setup</div>
+  <!-- DRAFTERS: HOW IT WORKS -->
+  <section style="background: var(--bg); padding: 96px 48px;">
+    <div class="section-label accent-blue">Setup</div>
     <div class="section-title">Up and running<br/>in minutes.</div>
     <div class="steps">
       <div class="step">
-        <div class="step-num">01</div>
+        <div class="step-num blue">01</div>
         <h4>Install</h4>
         <p>Add the extension to Chrome from the Web Store in one click.</p>
       </div>
       <div class="step">
-        <div class="step-num">02</div>
+        <div class="step-num blue">02</div>
         <h4>Subscribe</h4>
-        <p>Click the extension icon in your toolbar and purchase your $3/month subscription through the popup.</p>
+        <p>Click the extension icon in your toolbar and purchase your $10/month subscription through the popup.</p>
       </div>
       <div class="step">
-        <div class="step-num">03</div>
+        <div class="step-num blue">03</div>
         <h4>Open an NFL Best Ball Draft</h4>
-        <p>Navigate to any <strong style="color:var(--text); font-weight:500;">NFL best ball</strong> draft page on Drafters.com.</p>
+        <p>Navigate to any NFL best ball draft on Drafters.com.</p>
       </div>
       <div class="step">
-        <div class="step-num">04</div>
+        <div class="step-num blue">04</div>
         <h4>Draft</h4>
         <p>The overlay loads automatically — no configuration needed.</p>
       </div>
     </div>
   </section>
 
-  <!-- PRICING -->
-  <section class="pricing">
-    <div class="section-label">Pricing</div>
+  <!-- DRAFTERS: PRICING -->
+  <section style="background: var(--bg2); padding: 96px 48px;">
+    <div class="section-label accent-blue">Pricing</div>
     <div class="section-title">Simple, transparent pricing.</div>
-    <div class="pricing-card">
-      <div class="price-amount"><span>$</span>3</div>
+    <div class="pricing-card blue">
+      <div class="price-amount"><span>$</span>10</div>
       <div class="price-period">per month · cancel anytime</div>
       <ul class="price-features">
         <li>Full ownership overlay</li>
-        <li>Stack highlighting</li>
+        <li>Stack highlighting &amp; tracking</li>
         <li>Positional draft capital tracking</li>
         <li>Works on Drafters NFL best ball drafts</li>
         <li>Instant access after payment</li>
       </ul>
-      <a href="https://chrome.google.com/webstore" class="btn-cta">Get the Extension</a>
+      <a href="https://chrome.google.com/webstore" class="btn-cta blue">Get the Extension</a>
       <p class="cancel-note">Cancel anytime. No questions asked.</p>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="faq">
-    <div class="section-label">FAQ</div>
+  <!-- DRAFTERS: FAQ -->
+  <section style="background: var(--bg); padding: 96px 48px;">
+    <div class="section-label accent-blue">FAQ</div>
     <div class="section-title">Common questions.</div>
     <div class="faq-list">
       <div class="faq-item">
         <h4>Does this work on all Drafters drafts?</h4>
-        <p>No — the overlay is designed specifically for <strong style="color:var(--text); font-weight:500;">NFL best ball drafts</strong> on Drafters.com. It will not activate on other draft formats or sports.</p>
+        <p>No — the overlay is designed specifically for NFL best ball drafts on Drafters.com. It will not activate on other draft formats or sports.</p>
       </div>
       <div class="faq-item">
         <h4>Do I need to configure anything after installing?</h4>
@@ -557,7 +558,7 @@
       </div>
       <div class="faq-item">
         <h4>Can I cancel my subscription?</h4>
-        <p>Yes, cancel anytime with no questions asked. You'll retain access through the end of your billing period.</p>
+        <p>Yes, cancel anytime. You'll retain access through the end of your billing period.</p>
       </div>
       <div class="faq-item">
         <h4>Is my payment secure?</h4>
@@ -565,21 +566,153 @@
       </div>
       <div class="faq-item">
         <h4>Is this affiliated with Drafters?</h4>
-        <p>No. Drafters Best Ball Overlay is an independent third-party Chrome extension and is not affiliated with or endorsed by Drafters.</p>
+        <p>No. Drafters Overlay is an independent third-party Chrome extension and is not affiliated with or endorsed by Drafters.</p>
       </div>
     </div>
   </section>
 
-  <!-- POLICIES -->
-  <section class="policies" id="policies">
-    <div class="section-label">Legal</div>
+
+  <!-- ══════════════════════════════════════════
+       UNDERDOG OVERLAY
+  ══════════════════════════════════════════ -->
+  <div class="product-divider" id="underdog">
+    <span class="product-divider-pill divider-purple">🐶 Underdog Fantasy</span>
+    <span class="product-divider-title">Underdog Overlay</span>
+    <div class="product-divider-line"></div>
+  </div>
+
+  <!-- UNDERDOG: FEATURES -->
+  <section style="background: var(--bg2); padding: 96px 48px;">
+    <div class="section-label accent-purple">Features</div>
+    <div class="section-title">Your exposure data,<br/>live on the board.</div>
+    <p class="section-sub">Stop switching tabs to check your exposure spreadsheet. The Underdog Overlay surfaces everything you need directly inside your Underdog Fantasy draft.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">📈</span>
+        <h3>Exposure Overlay</h3>
+        <p>Your ownership percentages appear directly on each player in the draft board — color-coded by tier so you can spot overexposure and underexposure at a glance without leaving the page.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔗</span>
+        <h3>Stack Analysis</h3>
+        <p>Tracks your stacks in real time as you draft, highlighting teammates on the board and showing your strongest correlation opportunities before it's too late to act on them.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💰</span>
+        <h3>Draft Capital Tracking</h3>
+        <p>See exactly how much draft capital you've invested per position and what remains, so you can stay balanced and react quickly as the board evolves around you.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNDERDOG: SCREENSHOTS -->
+  <section style="background: var(--bg3); padding: 96px 48px;">
+    <div class="section-label accent-purple">In Action</div>
+    <div class="section-title">See it for yourself.</div>
+    <p class="section-sub">Your exposure percentages, stack targets, and remaining draft capital — all right where you're drafting on Underdog Fantasy.</p>
+    <div class="screenshots-grid">
+      <div>
+        <div class="screenshot-main">
+          <img src="screenshots/underdog-board.png" alt="Underdog Overlay showing exposure percentages on the draft board" />
+        </div>
+        <p class="screenshot-caption">Color-coded exposure badges on every player in the draft board</p>
+      </div>
+      <div>
+        <div class="screenshot-side">
+          <img src="screenshots/underdog-panel.png" alt="Underdog Overlay side panel" />
+        </div>
+        <p class="screenshot-caption">Stack targets + positional capital breakdown</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNDERDOG: HOW IT WORKS -->
+  <section style="background: var(--bg); padding: 96px 48px;">
+    <div class="section-label accent-purple">Setup</div>
+    <div class="section-title">Up and running<br/>in minutes.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num purple">01</div>
+        <h4>Install</h4>
+        <p>Add the extension to Chrome from the Web Store in one click.</p>
+      </div>
+      <div class="step">
+        <div class="step-num purple">02</div>
+        <h4>Subscribe</h4>
+        <p>Click the extension icon and purchase your $10/month subscription through the popup.</p>
+      </div>
+      <div class="step">
+        <div class="step-num purple">03</div>
+        <h4>Scrape Your Exposure</h4>
+        <p>Navigate to your Underdog exposure page and click Scrape — your ownership data loads instantly.</p>
+      </div>
+      <div class="step">
+        <div class="step-num purple">04</div>
+        <h4>Draft</h4>
+        <p>Open any Underdog Fantasy draft and the overlay activates automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNDERDOG: PRICING -->
+  <section style="background: var(--bg2); padding: 96px 48px;">
+    <div class="section-label accent-purple">Pricing</div>
+    <div class="section-title">Simple, transparent pricing.</div>
+    <div class="pricing-card purple">
+      <div class="price-amount"><span>$</span>10</div>
+      <div class="price-period">per month · cancel anytime</div>
+      <ul class="price-features">
+        <li>Full exposure overlay</li>
+        <li>Color-coded exposure tiers</li>
+        <li>Stack analysis &amp; highlighting</li>
+        <li>Positional draft capital tracking</li>
+        <li>Works on underdogfantasy.com</li>
+        <li>Instant access after payment</li>
+      </ul>
+      <a href="https://chrome.google.com/webstore" class="btn-cta purple">Get the Extension</a>
+      <p class="cancel-note">Cancel anytime. No questions asked.</p>
+    </div>
+  </section>
+
+  <!-- UNDERDOG: FAQ -->
+  <section style="background: var(--bg); padding: 96px 48px;">
+    <div class="section-label accent-purple">FAQ</div>
+    <div class="section-title">Common questions.</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <h4>What platforms does this work on?</h4>
+        <p>The Underdog Overlay works exclusively on Underdog Fantasy (underdogfantasy.com). It does not work on other fantasy platforms.</p>
+      </div>
+      <div class="faq-item">
+        <h4>How does my exposure data get into the extension?</h4>
+        <p>Navigate to your exposure page on Underdog and click the Scrape button in the extension popup. Your ownership data is pulled directly from the page and stored locally in your browser.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Do I need to re-scrape every draft?</h4>
+        <p>No — your data persists until you clear it. Just re-scrape whenever you want to update your ownership numbers after completing more drafts.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Can I cancel my subscription?</h4>
+        <p>Yes, cancel anytime. You'll retain access through the end of your billing period.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Is this affiliated with Underdog Fantasy?</h4>
+        <p>No. Underdog Overlay is an independent third-party Chrome extension and is not affiliated with or endorsed by Underdog Fantasy.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- POLICIES (shared) -->
+  <section style="background: var(--bg2); padding: 96px 48px;" id="policies">
+    <div class="section-label" style="color: var(--muted);">Legal</div>
     <div class="section-title">Policies</div>
     <div class="policy-grid">
       <div class="policy-block" id="privacy">
         <h3>Privacy Policy</h3>
         <p><strong style="color: var(--text); font-weight:500;">Last updated: March 2026</strong></p>
         <br/>
-        <p>Drafters Best Ball Overlay ("the Extension") is committed to protecting your privacy. This policy outlines what data we collect, how we use it, and your rights.</p>
+        <p>These extensions are committed to protecting your privacy. This policy applies to both the Drafters Overlay and Underdog Overlay.</p>
         <br/>
         <p><strong style="color: var(--text); font-weight:500;">Data We Collect</strong></p>
         <ul>
@@ -599,18 +732,18 @@
         <p>We use Stripe for payment processing and ExtensionPay for subscription management. We do not sell or share your data with any other third parties.</p>
         <br/>
         <p><strong style="color: var(--text); font-weight:500;">Contact</strong></p>
-        <p>Questions? Email us at <a href="mailto:octuplicatex@gmail.com.com" style="color: var(--accent);">octuplicatex@gmail.com</a></p>
+        <p>Questions? Email <a href="mailto:octuplicatex@gmail.com" style="color: var(--blue);">octuplicatex@gmail.com</a></p>
       </div>
       <div class="policy-block" id="refunds">
         <h3>Refund Policy</h3>
         <p><strong style="color: var(--text); font-weight:500;">Last updated: March 2026</strong></p>
         <br/>
-        <p>We want you to be satisfied with your purchase. If you're not happy with the extension for any reason, we offer the following:</p>
+        <p>We want you to be satisfied with your purchase. This policy applies to both extensions.</p>
         <br/>
         <p><strong style="color: var(--text); font-weight:500;">Subscription Refunds</strong></p>
         <ul>
           <li>Refunds are available within 7 days of your initial purchase, no questions asked</li>
-          <li>To request a refund, email us at <a href="mailto:octuplicatex@gmail.com" style="color: var(--accent);">octuplicatex@gmail.com</a> with your order details</li>
+          <li>To request a refund, email <a href="mailto:octuplicatex@gmail.com" style="color: var(--blue);">octuplicatex@gmail.com</a> with your order details</li>
           <li>Refunds are processed within 5–10 business days back to your original payment method</li>
         </ul>
         <br/>
@@ -622,14 +755,14 @@
         </ul>
         <br/>
         <p><strong style="color: var(--text); font-weight:500;">Contact</strong></p>
-        <p>For refund requests or billing questions, email <a href="mailto:octuplicatex@gmail.com" style="color: var(--accent);">octuplicatex@gmail.com</a></p>
+        <p>For refund requests, email <a href="mailto:octuplicatex@gmail.com" style="color: var(--blue);">octuplicatex@gmail.com</a></p>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2026 Drafters Best Ball Overlay. Not affiliated with Drafters.</p>
+    <p>© 2026 Fantasy Draft Extensions. Not affiliated with Drafters or Underdog Fantasy.</p>
     <div class="footer-links">
       <a href="#privacy">Privacy Policy</a>
       <a href="#refunds">Refund Policy</a>
